@@ -1,3 +1,24 @@
-# Principles-of-Computer-Composition
-cqut重庆理工大学计算机组成原理课程设计，所有指令都已经实现
-finally文件，下载下来，在logisim-generic-2.7.1_TRP软件中打开即可。
+# 意图识别 Demo 数据说明
+
+本目录包含意图识别展示工作台使用的脱敏案例与合成音频，共 10 个案例，覆盖单意图、多意图、短回复依赖上下文、投诉风险、第三方接听和收入困难等典型场景。内容仅用于研究与演示，不代表真实客户录音、真实业务结论或生产系统决策。
+
+## 目录结构
+
+- `index.json`：案例总索引。每条记录给出案例编号、展示名称、类型、案例 JSON 路径和完整音频路径。
+- `cases/Demo-XX.json`：单个案例的数据文件。
+- `qwen_next/Demo-XX/full_dialogue.wav`：对应案例的一段完整双人电话模拟音频。
+- `qwen_next/Demo-XX/generation.json`：音频生成记录，保留模型、台词提示词与请求标识，不包含 API 密钥或临时下载链接。
+
+## 案例 JSON 格式
+
+每个案例包含：
+
+- `id`、`title`、`case_type`：案例基础信息。
+- `notice`：展示场景中的脱敏与非生产声明。
+- `target_turn_index`：当前需要进行意图识别的客户轮次，从 1 开始计数。
+- `turns`：按时间顺序排列的上下文，`role` 仅为 `agent` 或 `customer`，`text` 为展示与音频使用的台词。
+- `intent_results`：当前目标轮的意图输出列表。`path` 为层级意图路径，`priority` 用于按业务优先级排序；`demo_score` 仅为展示用分数，不代表已训练模型的真实置信度。
+
+## 音频说明
+
+音频由 `qwen-audio-3.1-tts-next` 基于脱敏文本生成。每个案例对应一个完整 WAV 文件，固定区分坐席男声与客户女声，并包含连续轻微的电话通话底噪。展示端应读取 `index.json` 的 `audio_file`，而非旧版逐轮播放清单。
